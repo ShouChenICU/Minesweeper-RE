@@ -33,7 +33,11 @@ public class MenuPane extends AutoResizePane {
 		titleLabel.setSize(titleLabel.getPreferredSize());
 		titleLabel.setLocation(0, 0);
 		versionLabel.setFont(new Font("微软雅黑", Font.PLAIN, 18));
-		versionLabel.setSize(versionLabel.getPreferredSize());
+		Dimension versionLabelDimension = versionLabel.getPreferredSize();
+		versionLabel.setSize(
+			versionLabelDimension.width + 5,
+			versionLabelDimension.height
+		);
 		versionLabel.setLocation(titleLabel.getWidth(), titleLabel.getHeight() - versionLabel.getHeight());
 		titlePanel.setSize(titleLabel.getWidth() + versionLabel.getWidth(), titleLabel.getHeight() + versionLabel.getHeight());
 		actionPanel = new JPanel();
