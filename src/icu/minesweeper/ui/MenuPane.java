@@ -67,7 +67,7 @@ public class MenuPane extends AutoResizePane {
 
 	@Override
 	public void autoResize(int width, int height) {
-		titlePanel.setLocation((width - titlePanel.getWidth()) / 2, 0);
+		titlePanel.setLocation((width - titlePanel.getWidth()) / 2, 10);
 		actionPanel.setLocation((width - actionPanel.getWidth()) / 2, (height - actionPanel.getHeight() - titlePanel.getHeight() - titlePanel.getY()) / 2);
 	}
 }
