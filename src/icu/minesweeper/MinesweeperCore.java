@@ -12,9 +12,34 @@ import java.util.Random;
  * DateTime: 2021-05-16 19:20
  */
 public class MinesweeperCore {
+	/**
+	 * 游戏模式：简单
+	 */
 	private static final int GAME_MODE_EASY = 0;
+	/**
+	 * 游戏模式：中等
+	 */
 	private static final int GAME_MODE_MEDIUM = 1;
+	/**
+	 * 游戏模式：困难
+	 */
 	private static final int GAME_MODE_HARD = 2;
+	/**
+	 * 游戏状态：已结束
+	 */
+	private static final int GAME_STATUS_END = 0;
+	/**
+	 * 游戏状态：进行中
+	 */
+	private static final int GAME_STATUS_ING = 1;
+	/**
+	 * 游戏状态：已胜利
+	 */
+	private static final int GAME_STATUS_WIN = 2;
+	/**
+	 * 游戏状态：已失败
+	 */
+	private static final int GAME_STATUS_FAIL = 3;
 	/**
 	 * 雷区地图
 	 * 0-9表示被翻开，9表示雷
@@ -60,13 +85,17 @@ public class MinesweeperCore {
 	 */
 	private long endTime;
 	/**
-	 * 游戏是否结束
+	 * 游戏状态
 	 */
-	private boolean isEnd;
+	private int gameStatus;
 	/**
 	 * 是否第一次点击
 	 */
 	private boolean firstClick;
+	/**
+	 * 分数
+	 */
+	private int fraction;
 	/**
 	 * 方块翻转推送
 	 */
@@ -118,7 +147,7 @@ public class MinesweeperCore {
 	 * @param y y
 	 */
 	public void clickBlock(int x, int y) {
-		if (x >= mapWidth || y >= mapHeight || isEnd) {
+		if (x >= mapWidth || y >= mapHeight || gameStatus != GAME_STATUS_ING) {
 			return;
 		}
 		if (firstClick) {
@@ -134,7 +163,7 @@ public class MinesweeperCore {
 				lifeValue--;
 				mineMap[y][x] = 9;
 				if (lifeValue == 0) {
-					isEnd = true;
+					gameStatus = GAME_STATUS_FAIL;
 					endTime = System.currentTimeMillis();
 				}
 				flipCallBack.run();
@@ -176,6 +205,9 @@ public class MinesweeperCore {
 	 * @param y y
 	 */
 	public void doubleClickBlock(int x, int y) {
+		if (x >= mapWidth || y >= mapHeight || gameStatus != GAME_STATUS_ING) {
+			return;
+		}
 		if (mineMap[y][x] >= 10) {
 			return;
 		}
@@ -209,6 +241,14 @@ public class MinesweeperCore {
 	 * @param y y
 	 */
 	public void markBlock(int x, int y) {
+		if (x >= mapWidth || y >= mapHeight || gameStatus != GAME_STATUS_ING) {
+			return;
+		}
+		if (mineMap[y][x] >= 10 && mineMap[y][x] < 30) {
+			mineMap[y][x] += 10;
+		} else {
+			mineMap[y][x] -= 20;
+		}
 
 	}
 
@@ -219,7 +259,8 @@ public class MinesweeperCore {
 	 */
 	public void startGame(int gameMode) {
 		this.clickCount = 0;
-		this.isEnd = false;
+		this.fraction = 0;
+		this.gameStatus = GAME_STATUS_ING;
 		this.firstClick = true;
 		if (gameMode == GAME_MODE_EASY) {
 			mapWidth = 9;
@@ -270,8 +311,12 @@ public class MinesweeperCore {
 		return endTime;
 	}
 
+	public int getFraction() {
+		return fraction;
+	}
+
 	public MinesweeperCore() {
-		this.isEnd = true;
+		this.gameStatus = GAME_STATUS_END;
 		this.flipCallBack = () -> {
 		};
 	}

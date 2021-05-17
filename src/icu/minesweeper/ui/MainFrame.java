@@ -16,10 +16,15 @@ import java.awt.event.ComponentEvent;
  */
 public class MainFrame extends JFrame {
 	private static volatile MainFrame mainFrame;
+	private JPanel contentPane;
 	/**
 	 * 菜单面板
 	 */
 	private MenuPane menuPane;
+	/**
+	 * 单人游戏
+	 */
+	private SingleGamePane singleGamePane;
 	/**
 	 * 当前显示的容器
 	 */
@@ -45,7 +50,12 @@ public class MainFrame extends JFrame {
 	 * 初始化UI
 	 */
 	private void initUI() {
-		this.menuPane = new MenuPane();
+		contentPane = (JPanel) this.getContentPane();
+		contentPane.setLayout(null);
+		contentPane.setOpaque(true);
+		contentPane.setBackground(Color.white);
+		menuPane = new MenuPane();
+		singleGamePane = new SingleGamePane();
 		SwingUtilities.invokeLater(() -> {
 			this.setDefaultCloseOperation(MainFrame.EXIT_ON_CLOSE);
 			this.setTitle(EnvironmentVariable.NAME + " V" + EnvironmentVariable.VERSION);
@@ -53,10 +63,30 @@ public class MainFrame extends JFrame {
 			this.setSize(800, 600);
 			this.setBackground(Color.lightGray);
 			this.setLocationRelativeTo(null);
-			this.setContentPane(this.menuPane);
+			contentPane.add(menuPane);
 			this.displayPane = this.menuPane;
 			this.setVisible(true);
 		});
+	}
+
+	/**
+	 * 显示主菜单
+	 */
+	public void showMenu() {
+		contentPane.removeAll();
+		contentPane.add(menuPane);
+		displayPane = menuPane;
+		this.autoResize();
+	}
+
+	/**
+	 * 显示单人游戏界面
+	 */
+	public void showSingleGame() {
+		contentPane.removeAll();
+		contentPane.add(singleGamePane);
+		displayPane = singleGamePane;
+		this.autoResize();
 	}
 
 	private MainFrame() {
@@ -65,12 +95,15 @@ public class MainFrame extends JFrame {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				super.componentResized(e);
-				autoResize(getWidth(), getHeight());
+				autoResize();
 			}
 		});
 	}
 
-	public void autoResize(int width, int height) {
+	public void autoResize() {
+		int width = getWidth();
+		int height = getHeight();
+		this.displayPane.setBounds(0, 0, width, height);
 		this.displayPane.autoResize(width, height);
 	}
 }

@@ -35,8 +35,8 @@ public class MenuPane extends AutoResizePane {
 		versionLabel.setFont(new Font("微软雅黑", Font.PLAIN, 18));
 		Dimension versionLabelDimension = versionLabel.getPreferredSize();
 		versionLabel.setSize(
-			versionLabelDimension.width + 5,
-			versionLabelDimension.height
+				versionLabelDimension.width + 5,
+				versionLabelDimension.height
 		);
 		versionLabel.setLocation(titleLabel.getWidth(), titleLabel.getHeight() - versionLabel.getHeight());
 		titlePanel.setSize(titleLabel.getWidth() + versionLabel.getWidth(), titleLabel.getHeight() + versionLabel.getHeight());
@@ -47,10 +47,10 @@ public class MenuPane extends AutoResizePane {
 		startGameButton = new JButton("单人游戏");
 		startGameButton.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 		startGameButton.setBounds(0, 0, 100, 40);
+		startGameButton.addActionListener(arg -> MainFrame.getInstance().showSingleGame());
 		aboutButton = new JButton("关于");
 		aboutButton.setFont(new Font("微软雅黑", Font.PLAIN, 16));
 		aboutButton.setBounds(0, 50, 100, 40);
-
 		SwingUtilities.invokeLater(() -> {
 			titlePanel.add(titleLabel);
 			titlePanel.add(versionLabel);
